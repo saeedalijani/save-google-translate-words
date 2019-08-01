@@ -1,0 +1,19 @@
+#!/bin/bash
+
+. ./translate.config
+
+if [ ! -d "$saved_worlds_path" ]; then
+  mkdir -p "$saved_worlds_path";
+fi
+
+
+trans "$from_language":"$to_language" $1 -no-ansi > ./.temp.txt
+
+
+from_language_word=`cat ./.temp.txt | sed '1!d' |  sed -e 's/\s.*$//'`
+to_language_word=`cat ./.temp.txt | sed '4!d' | sed -e 's/\<null\>//g'`
+
+cat ./.temp.txt
+echo $from_language_word, $to_language_word | fribidi >> "$saved_worlds_path"`date -I`.csv
+rm ./.temp.txt
+
